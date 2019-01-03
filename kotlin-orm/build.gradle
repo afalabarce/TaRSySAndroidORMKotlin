@@ -1,0 +1,172 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven'
+
+def libraryVersionId = 1008
+def libraryVersionCode='1.0.0.8'
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'TaRSySAndroidORMKotlin'
+    //bintrayName = 'com.github.tarsys.android.kotlin.orm'
+    publishedGroupId = 'com.github.tarsys.android'
+    libraryName = 'kotlin-orm'
+    artifact = 'kotlin-orm'
+    libraryDescription = 'Yet another Advanced Android ORM Kotlin Version'
+    siteUrl = 'http://tarsys.github.io/TaRSySAndroidORM/'
+    gitUrl = 'https://github.com/tarsys/TaRSySAndroidORM.git'
+
+    libraryVersion = libraryVersionCode
+
+    developerId = 'tarsys'
+    developerName = 'Antonio Fdez. A.'
+    developerEmail = 'tarsysdev@gmail.com'
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode libraryVersionId
+        versionName libraryVersionCode
+    }
+    buildTypes {
+        debug {
+            debuggable true
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+//def TaRSySAndroidORMKotlinAarFile = file('build/orm-kotlin.aar')
+//
+//artifacts {
+//    archives TaRSySAndroidORMKotlinAarFile
+//}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file:///Users/tarsys/Desarrollo/MavenRepo/aars")
+            pom.groupId = publishedGroupId
+            pom.artifactId = artifact
+            pom.version = libraryVersionCode
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation 'com.github.tarsys.android:support:1.0.3.9'
+    implementation 'com.google.code.gson:gson:2.8.2'
+}
+
+group = 'com.github.tarsys.android'
+artifact = 'kotlin-orm'
+version = libraryVersion
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+
+                // Add your description here
+                name libraryName
+                description libraryDescription
+                version libraryVersionCode
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id developerId
+                        name developerName
+                        email developerEmail
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// Bintray
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        version libraryVersionCode
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            desc = libraryDescription
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password")
+                //Optional. The passphrase for GPG signing'
+            }
+        }
+    }
+}
