@@ -1,4 +1,4 @@
 # TaRSySAndroidORM
 Yet Another Advanced ORM for Android Kotlin Version
 
-see http://tarsys.github.io/TaRSySAndroidORMKotlin/ for more info :)
+## Why I created this ORM if there are already many others?
