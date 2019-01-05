@@ -39,6 +39,7 @@ android {
         versionCode libraryVersionId
         versionName libraryVersionCode
     }
+
     buildTypes {
         debug {
             debuggable true
