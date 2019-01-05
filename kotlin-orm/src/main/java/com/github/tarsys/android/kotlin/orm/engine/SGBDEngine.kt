@@ -193,7 +193,6 @@ class SGBDEngine {
                         }
                     }
 
-
                 returnValue += entities.values
             }catch (ex: Exception){
                 Log.e("SGBD::createDBM", ex.message)

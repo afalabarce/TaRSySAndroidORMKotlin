@@ -387,7 +387,6 @@ fun <T: IOrmEntity>T.delete(): Boolean{
     var returnValue: Boolean = false
     val sqliteDb = SGBDEngine.SQLiteDataBase(false)
 
-
     if (sqliteDb?.isOpen == true){
         val dbEntity = this.javaClass.kotlin.dbEntity
         if (dbEntity != null){

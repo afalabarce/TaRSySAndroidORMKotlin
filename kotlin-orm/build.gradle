@@ -29,6 +29,7 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
+
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"

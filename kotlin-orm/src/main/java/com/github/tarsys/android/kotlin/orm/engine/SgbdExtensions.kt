@@ -30,8 +30,7 @@ val KProperty<*>.dbIndexes: ArrayList<Index>
         val collectionIndexes = this.findAnnotation<Indexes>()
         if (simpleIndex != null) returnValue += simpleIndex
         if (collectionIndexes != null) returnValue += collectionIndexes.value
-
-
+        
         return returnValue
     }
 
