@@ -5,8 +5,8 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven'
 
-def libraryVersionId = 1008
-def libraryVersionCode='1.0.0.8'
+def libraryVersionId = 1025
+def libraryVersionCode='1.0.2.5'
 
 ext {
     bintrayRepo = 'maven'
@@ -16,8 +16,8 @@ ext {
     libraryName = 'kotlin-orm'
     artifact = 'kotlin-orm'
     libraryDescription = 'Yet another Advanced Android ORM Kotlin Version'
-    siteUrl = 'http://tarsys.github.io/TaRSySAndroidORM/'
-    gitUrl = 'https://github.com/tarsys/TaRSySAndroidORM.git'
+    siteUrl = 'http://tarsys.github.io/TaRSySAndroidORMKotlin/'
+    gitUrl = 'https://github.com/tarsys/TaRSySAndroidORMKotlin.git'
 
     libraryVersion = libraryVersionCode
 
@@ -39,12 +39,12 @@ android {
         versionCode libraryVersionId
         versionName libraryVersionCode
     }
-
     buildTypes {
         debug {
             debuggable true
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

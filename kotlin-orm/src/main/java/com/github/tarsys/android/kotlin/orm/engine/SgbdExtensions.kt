@@ -17,10 +17,7 @@ import kotlin.collections.ArrayList
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty
-import kotlin.reflect.full.createType
-import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.full.*
 import kotlin.reflect.jvm.javaType
 import kotlin.reflect.jvm.jvmErasure
 
@@ -33,6 +30,7 @@ val KProperty<*>.dbIndexes: ArrayList<Index>
         val collectionIndexes = this.findAnnotation<Indexes>()
         if (simpleIndex != null) returnValue += simpleIndex
         if (collectionIndexes != null) returnValue += collectionIndexes.value
+
 
         return returnValue
     }
@@ -55,12 +53,12 @@ val KProperty<*>.dbDataType: DBDataType
             this.returnType != Date::class.createType() &&
             this.returnType != String::class.createType()){
 
-            if ((this.returnType.javaType as Class<*>).isEnum){
+            if (this.returnType.javaClass.isEnum){
                 returnValue = DBDataType.EnumDataType
-            }else if (this.returnType.findAnnotation<DBEntity>() != null){
+            }else if (this.returnType.isSubtypeOf(IOrmEntity::class.starProjectedType)){
                 returnValue = DBDataType.EntityDataType
-            }else if ((this.returnType.javaType as Class<*>).isAssignableFrom(ArrayList::class.java)){
-
+            }else if (this.returnType.isSubtypeOf(ArrayList::class.starProjectedType)){
+                returnValue = DBDataType.EntityListDataType
             }
 
 
@@ -157,12 +155,14 @@ fun KProperty<*>.foreignKeyFieldName(dbEntity: DBEntity): String
 
 fun KClass<*>.createFilteringEntity(vClass: KClass<*>, dataCursor: Cursor): Any? {
     val dbEntity = this.dbEntity
+    var returnValue: Any? = null
+
     try{
         if (dbEntity != null){
             val primaryKeyProperties = this.primaryKeyProperties
 
             if (!(primaryKeyProperties?.isEmpty())){
-                val returnValue = vClass.primaryConstructor?.call()
+                returnValue = vClass.primaryConstructor?.call()
 
                 for(pkField in primaryKeyProperties){
                     val fieldName = pkField.foreignKeyFieldName(dbEntity)
@@ -180,7 +180,19 @@ fun KClass<*>.createFilteringEntity(vClass: KClass<*>, dataCursor: Cursor): Any?
                     }
 
                     if (fieldValue != null && pkField is KMutableProperty){
-                        pkField.setter.call(this, fieldValue)
+
+                        if (pkField.tableField!!.DataType in arrayOf(DBDataType.IntegerDataType, DBDataType.LongDataType)){
+                            try{
+                                pkField.setter.call(returnValue, fieldValue as? Long ?: 0)
+                            }catch (ex: Exception){
+                                if (fieldValue is Int)
+                                    pkField.setter.call(returnValue, fieldValue as? Int ?: 0)
+                                else
+                                    pkField.setter.call(returnValue, (fieldValue as? Long ?: 0).toInt())
+                            }
+                        }else{
+                            pkField.setter.call(returnValue, fieldValue)
+                        }
                     }
 
                 }
@@ -191,7 +203,7 @@ fun KClass<*>.createFilteringEntity(vClass: KClass<*>, dataCursor: Cursor): Any?
         ex.printStackTrace()
     }
 
-    return null
+    return returnValue
 }
 
 val KClass<*>.dbEntity: DBEntity?

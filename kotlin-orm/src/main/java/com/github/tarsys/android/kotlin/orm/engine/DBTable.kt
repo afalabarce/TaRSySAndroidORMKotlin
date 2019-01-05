@@ -65,6 +65,7 @@ class DBTable {
                     }
                 }
 
+
                 if (field.DataType !in arrayOf( DBDataType.EntityDataType, DBDataType.EntityListDataType)){
                     // Primitive fields
                     paramDefinition += if (paramDefinition.trim().isEmpty()) AndroidSupport.EmptyString else ", "
@@ -77,7 +78,7 @@ class DBTable {
                         if (field.DataType == DBDataType.EntityDataType){
                             for(fkField in field.EntityClass.primaryKeyProperties){
                                 paramDefinition += if (!paramDefinition.isEmpty()) ", " else AndroidSupport.EmptyString
-                                paramDefinition += "${field.EntityClass.tableName}_${"${if (fkField.tableField!!.DataType != DBDataType.DateDataType) SQLiteSupport.PREFIX_DATE_FIELD else ""}${fkField.tableField!!.FieldName}" } ${fkField.tableField!!.DataType.SqlType(fkField.tableField!!.DataTypeLength)}"
+                                paramDefinition += "${field.EntityClass.tableName}_${"${if (fkField.tableField!!.DataType == DBDataType.DateDataType) SQLiteSupport.PREFIX_DATE_FIELD else ""}${fkField.tableField!!.FieldName}" } ${fkField.tableField!!.DataType.SqlType(fkField.tableField!!.DataTypeLength)}"
                             }
                         }else{
                             returnValue.add(this.sqlCreateForeignKey(field.EntityClass.dbTable!!))
