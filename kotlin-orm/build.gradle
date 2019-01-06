@@ -5,13 +5,12 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven'
 
-def libraryVersionId = 1025
-def libraryVersionCode='1.0.2.5'
+def libraryVersionId = 1026
+def libraryVersionCode='1.0.2.6'
 
 ext {
     bintrayRepo = 'maven'
     bintrayName = 'TaRSySAndroidORMKotlin'
-    //bintrayName = 'com.github.tarsys.android.kotlin.orm'
     publishedGroupId = 'com.github.tarsys.android'
     libraryName = 'kotlin-orm'
     artifact = 'kotlin-orm'
