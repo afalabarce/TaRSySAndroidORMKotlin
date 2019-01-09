@@ -1,6 +1,7 @@
 package com.github.tarsys.android.kotlin.orm.engine
 
 import android.content.ContentValues
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.github.tarsys.android.kotlin.orm.annotations.TableField
@@ -19,35 +20,100 @@ import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.isSubtypeOf
+import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.full.starProjectedType
 
 //region Useful query methods
 
-fun SQLiteDatabase.rawQueryToDataTable(sqlQuery: String): DataTable? = this.rawQueryToDataTable(sqlQuery, false)
-
-fun SQLiteDatabase.rawQueryToDataTable(sqlQuery: String, forceOnlyDate: Boolean): DataTable?{
+inline fun <reified T:IOrmEntity>KClass<T>.mapSoftEntity(cursorEntity: Cursor): T?{
     try{
-        val cursor = this.rawQuery(sqlQuery, null)
-        if (cursor != null){
-            val returnValue = DataTable()
-            cursor.moveToFirst()
-            cursor.columnNames.forEach { column ->
-                // TODO: Pending implementing datasource read...
-            }
+        val returnValue: T? = T::class.primaryConstructor?.call()
+        val fieldProperties = T::class.tableFieldProperties.filter { x -> x is KMutableProperty }
+        val dbEntity = T::class.dbEntity
+
+        for(field in fieldProperties){
+            val tableField = field.tableField!!
+
+            (field as KMutableProperty).setter.call(returnValue, when (tableField.DataType){
+                DBDataType.StringDataType, DBDataType.TextDataType -> cursorEntity.getString(cursorEntity.getColumnIndex(field.fieldName))
+                DBDataType.RealDataType -> cursorEntity.getFloat(cursorEntity.getColumnIndex(field.fieldName))
+                DBDataType.IntegerDataType, DBDataType.LongDataType -> if (field.returnType == Int::class.starProjectedType) cursorEntity.getInt(cursorEntity.getColumnIndex(field.fieldName)) else cursorEntity.getLong(cursorEntity.getColumnIndex(field.fieldName))
+                DBDataType.DateDataType -> {
+                    val calendar = Calendar.getInstance()
+                    calendar.timeInMillis = cursorEntity.getLong(cursorEntity.getColumnIndex(field.fieldName))
+                    calendar.time
+                }
+                DBDataType.BooleanDataType -> cursorEntity.getInt(cursorEntity.getColumnIndex(field.fieldName)) == 1
+                DBDataType.Serializable -> GsonBuilder().create().fromJson(cursorEntity.getString(cursorEntity.getColumnIndex(field.fieldName)), field.returnType::class.java)
+                DBDataType.EnumDataType -> {
+                    if (field.returnType::class.java.isEnum){
+                        val ordinalValue = cursorEntity.getInt(cursorEntity.getColumnIndex(field.fieldName))
+                        field.returnType::class.java.cast(ordinalValue)
+                    }else{
+                        null
+                    }
+                }
+                DBDataType.EntityDataType -> {
+                    val dbEntityField = field.dbEntityClass?.dbEntity
+
+                    if (dbEntityField != null){
+                        field.dbEntityClass?.createFilteringEntity(field.dbEntityClass!!, cursorEntity) as? IOrmEntity
+                    }else{
+                        null
+                    }
+                }
+                DBDataType.EntityListDataType ->{
+                    val fieldClass = field.dbEntityClass
+                    val fieldDbEntity = fieldClass?.dbEntity
+
+                    if (fieldDbEntity != null && (field.returnType.javaClass.isArray || field.returnType.isSubtypeOf(ArrayList::class.starProjectedType)) && tableField.EntityClass.isSubclassOf(IOrmEntity::class)){
+                        arrayListOf<IOrmEntity>()
+                    }else{
+                        null
+                    }
+                }
+                else -> null
+            })
         }
+
+        return returnValue
     }catch (ex: Exception){
-        Log.e("rawQueryToDataTable", ex.message)
+        Log.e("mapSoftEntity", ex.message)
         ex.printStackTrace()
     }
+
 
     return null
 }
 
-fun <T:IOrmEntity> KClass<T>.filterObjectQuery(filterMap: Map<String, Any>): ArrayList<T>{
-    val returnValue: ArrayList<T> = arrayListOf()
-    // TODO: Pending implementing object filter read...
+inline fun <reified T:IOrmEntity> KClass<T>.filter(predicate: (T) -> Boolean): ArrayList<T> = this.filterMap(false, predicate)
 
-    return returnValue
+inline fun <reified T:IOrmEntity> KClass<T>.fullFilter(predicate: (T) -> Boolean): ArrayList<T> = this.filterMap(true, predicate)
+
+inline fun <reified T:IOrmEntity> KClass<T>.filterMap(fullMap: Boolean, predicate: (T) -> Boolean): ArrayList<T>{
+    val returnValue: ArrayList<T> = arrayListOf()
+
+    val sqliteDb = SGBDEngine.SQLiteDataBase(true)
+
+    if (sqliteDb?.isOpen == true){
+        val dbEntity = T::class.dbEntity
+
+        if (dbEntity != null){
+            val query = sqliteDb.query(dbEntity.TableName, null, null, null, null, null, null)
+
+            while (query?.moveToNext() == true){
+                val softEntity = T::class.mapSoftEntity(query)
+
+                if (softEntity != null)
+                    returnValue += softEntity
+            }
+
+            query.close()
+            sqliteDb.close()
+        }
+    }
+
+    return  ArrayList(returnValue.filter(predicate).map{ p -> (if (!fullMap) p else { p!!.read(); p}) } )
 }
 
 //endregion

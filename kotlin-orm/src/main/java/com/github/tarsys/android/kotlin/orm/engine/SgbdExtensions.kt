@@ -334,4 +334,3 @@ val KClass<*>.tableFieldProperties: ArrayList<KProperty<*>>
 fun KClass<*>.entityListRelationTables(addWithoutCascadeDelete: Boolean): List<String> = this.entityListFields
                     .filter { x -> x.tableField!!.CascadeDelete || (!addWithoutCascadeDelete && !x.tableField!!.CascadeDelete) }
                     .map { f -> "rel_${this.dbEntity!!.TableName.toLowerCase()}_${f.dbEntityClass!!.tableName}" }
-
