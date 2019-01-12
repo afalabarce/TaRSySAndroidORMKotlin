@@ -124,4 +124,4 @@ The integration with your project is very simple, let's see it in somesteps:
     }
   ```
 
-
+**If you think I've done a good job, you can consider contributing to the development of this library. [PaypalMe!](https://www.paypal.me/TaRSyS)**
