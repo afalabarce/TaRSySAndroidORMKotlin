@@ -39,6 +39,7 @@ The integration with your project is very simple, let's see it in somesteps:
             </activity>
         </application>
   ```
+  
 3. Add in your Launcher activity this code:
   ```kotlin
   
@@ -48,6 +49,7 @@ The integration with your project is very simple, let's see it in somesteps:
     // if something wrong, do other stuff
   }
   ```
+  
 4. Create the entity classes (**All classes must implement the IOrmEntity Interface**):
 ```kotlin
 package com.tarsys.examplekotlinorm.entities
