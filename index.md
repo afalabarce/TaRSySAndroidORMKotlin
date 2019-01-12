@@ -11,7 +11,7 @@ The integration with your project is very simple, let's see it in somesteps:
 1. Add a reference in your build.gradle.
 
 ```markdown
-implementation 'com.github.tarsys.android:kotlin-orm:1.0.2.8'
+`implementation` 'com.github.tarsys.android:kotlin-orm:1.0.2.8'
 ```
 
 2. Add some meta tags to your Manifest.xml
