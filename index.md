@@ -10,11 +10,34 @@ The integration with your project is very simple, let's see it in somesteps:
 
 1. Add a reference in your build.gradle.
 
-```markdown
-`implementation` 'com.github.tarsys.android:kotlin-orm:1.0.2.8'
-```
+  ```markdown
+  implementation 'com.github.tarsys.android:kotlin-orm:1.0.2.8'
+  ```
 
 2. Add some meta tags to your Manifest.xml
+  ```xml
+    <application
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme" >
+
+            <meta-data android:name="IS_EXTERNALSTORAGE" android:value="true" />
+            <meta-data android:name="DATABASE_DIRECTORY" android:value="ExampleTaRSySORM" />
+            <meta-data android:name="DATABASE_NAME" android:value="exampletarsysorm.db" />
+            <meta-data android:name="ENTITY_PACKAGES" android:value="com.tarsys.exampletarsysorm.entities" />
+            <meta-data android:name="DB_STRING_DEFAULT_LENGTH" android:value="500" />
+
+            <activity android:name=".MainActivity" >
+                <intent-filter>
+                    <action android:name="android.intent.action.MAIN" />
+                    <category android:name="android.intent.category.LAUNCHER" />
+                </intent-filter>
+            </activity>
+        </application>
+  ```
+
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
