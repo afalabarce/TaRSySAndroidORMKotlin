@@ -4,7 +4,17 @@ I created this ORM for one simple reason ... I could not find one that would cov
 
 I was looking for a ORM that was easy to deploy, powerful, and without any interaction by the developer at the time of making changes to the persistent entities. Previously, I developed an ORM for Java ([TaRSySAndroidORM](http://tarsys.github.io/TaRSySAndroidORM/)), but I saw that there was not one developed with Kotlin and for Kotlin to cover my needs...
 
-### Markdown
+### How it works?
+
+The integration with your project is very simple, let's see it in somesteps:
+
+1. Add a reference in your build.gradle.
+
+```markdown
+implementation 'com.github.tarsys.android:kotlin-orm:1.0.2.8'
+```
+
+2. Add some meta tags to your Manifest.xml
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
