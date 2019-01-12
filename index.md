@@ -75,6 +75,53 @@ The integration with your project is very simple, let's see it in somesteps:
   ```
 5. Use it!
   ```kotlin
+    // Create some Person entities
+    val person1 = Person()
+    val person2 = Person()
+    
+    // Create some Car entities
+    val car1 = Car()
+    val car2 = Car()
+    val car3 = Car()
+    
+    car1.CarPlate = "1234BNZ"
+    car1.Brand = "Mazda"
+    car1.Model = "2"
+    
+    car2.CarPlate = "5432DSJ"
+    car2.Brand = "Toyota"
+    car2.Model = "Avensis"
+    
+    car3.CarPlate = "4356KDD"
+    car3.Brand = "Mazda"
+    car3.Model = "CX-5"
+    
+    person1.FirstName = "Jane"
+    person1.LastName = "Nobody"
+    person1.Cars.addAll(arrayListOf(car1, car2))
+    
+    person2.FirstName = "John"
+    person2.LastName = "Nobody"
+    person2.Cars.add(car3)
+    
+    // If we don't persist car entities, when we save persons, recursivelly save the cars too
+    if (person1.save() && person2.save()){
+      // because we have persons, we can filter using lambda or primary key loads...
+      val personPk = Person()
+      personPk.Id = 1 // We suppose person 1 has id = 1
+      if (personPk.read()){
+        // Successfully readed person...
+              
+        // we can delete entities...
+        if (personPk.delete()){
+          // if we have deleted the entity...
+        }
+      }
+      
+      // we can filter first level entities (don't filter sub entities, like arrays...)
+      val fPersons = Person::class.filter { x -> x.LastName == "Nobody"} // returns a soft loaded entities (subentities, only with ids)
+      val fullPersons = Person::class.fullFilter { x -> x.LastName == "Nobody"} // returns a full loaded entities      
+    }
   ```
 
 
