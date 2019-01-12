@@ -39,7 +39,15 @@ The integration with your project is very simple, let's see it in somesteps:
             </activity>
         </application>
   ```
-
+3. Add in your Launcher activity this code:
+  ```kotlin
+  
+  if (SGBDEngine.initialize(this)){
+    // TODO: Do some stuff
+  }else{
+    // if something wrong, do other stuff
+  }
+  ```
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
