@@ -42,7 +42,6 @@ The integration with your project is very simple, let's see it in somesteps:
   
 3. Add in your Launcher activity this code:
   ```kotlin
-  
   if (SGBDEngine.initialize(this)){
     // TODO: Do some stuff
   }else{
@@ -51,11 +50,9 @@ The integration with your project is very simple, let's see it in somesteps:
   ```
   
 4. Create the entity classes (**All classes must implement the IOrmEntity Interface**):
-```kotlin
-package com.tarsys.examplekotlinorm.entities
-
-
-```
+  ```kotlin
+  package com.tarsys.examplekotlinorm.entities
+  ```
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
