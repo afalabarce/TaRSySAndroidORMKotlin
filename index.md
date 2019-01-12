@@ -28,7 +28,7 @@ The integration with your project is very simple, let's see it in somesteps:
             <meta-data android:name="IS_EXTERNALSTORAGE" android:value="true" />
             <meta-data android:name="DATABASE_DIRECTORY" android:value="ExampleTaRSySORM" />
             <meta-data android:name="DATABASE_NAME" android:value="exampletarsysorm.db" />
-            <meta-data android:name="ENTITY_PACKAGES" android:value="com.tarsys.exampletarsysorm.entities" />
+            <meta-data android:name="ENTITY_PACKAGES" android:value="com.tarsys.examplekotlinorm.entities" />
             <meta-data android:name="DB_STRING_DEFAULT_LENGTH" android:value="500" />
 
             <activity android:name=".MainActivity" >
@@ -48,6 +48,12 @@ The integration with your project is very simple, let's see it in somesteps:
     // if something wrong, do other stuff
   }
   ```
+4. Create the entity classes (**All classes must implement the IOrmEntity Interface**):
+```kotlin
+package com.tarsys.examplekotlinorm.entities
+
+
+```
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
