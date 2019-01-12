@@ -51,26 +51,26 @@ The integration with your project is very simple, let's see it in somesteps:
   
   @DBEntity
   class Car: Serializable, IOrmEntity {
-    @TableField(PrimaryKey = true)
-    var Id: Int = 0
-    @TableField
-    var CarPlate: String = AndroidSupport.EmptyString
-    @TableField
-    var Brand: String = AndroidSupport.EmptyString
-    @TableField
-    var Model: String = AndroidSupport.EmptyString
+      @TableField(PrimaryKey = true)
+      var Id: Int = 0
+      @TableField
+      var CarPlate: String = AndroidSupport.EmptyString
+      @TableField
+      var Brand: String = AndroidSupport.EmptyString
+      @TableField
+      var Model: String = AndroidSupport.EmptyString
   }
   
   @DBEntity
   class Person: Serializable, IOrmEntity {
-    @TableField(PrimaryKey = true)
-    var Id: Int = 0
-    @TableField(DataTypeLength = 60)
-    var FirstName: String = AndroidSupport.EmptyString
-    @TableField(DataTypeLength = 60)
-    var LastName: String = AndroidSupport.EmptyString
-    @TableField(DataType = DBDataType.EntityListDataType, EntityClass = Car::class, CascadeDelete = true)
-    var Cars: ArrayList<Car> = arrayListOf()
+      @TableField(PrimaryKey = true)
+      var Id: Int = 0
+      @TableField(DataTypeLength = 60)
+      var FirstName: String = AndroidSupport.EmptyString
+      @TableField(DataTypeLength = 60)
+      var LastName: String = AndroidSupport.EmptyString
+      @TableField(DataType = DBDataType.EntityListDataType, EntityClass = Car::class, CascadeDelete = true)
+      var Cars: ArrayList<Car> = arrayListOf()
   }
   ```
 5. Use it!
