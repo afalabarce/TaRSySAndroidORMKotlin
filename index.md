@@ -48,7 +48,6 @@ The integration with your project is very simple, let's see it in somesteps:
 4. Create the entity classes (**All classes must implement the IOrmEntity Interface**):
   ```kotlin
   package com.tarsys.examplekotlinorm.entities
-
   @DBEntity
   class Car: Serializable, IOrmEntity {
     @TableField(PrimaryKey = true)
@@ -60,7 +59,6 @@ The integration with your project is very simple, let's see it in somesteps:
     @TableField
     var Model: String = AndroidSupport.EmptyString
   }
-  
   @DBEntity
   class Person: Serializable, IOrmEntity {
     @TableField(PrimaryKey = true)
