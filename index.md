@@ -11,7 +11,6 @@ I was looking for a ORM that was easy to deploy, powerful, and without any inter
 The integration with your project is very simple, let's see it in somesteps:
 
 1. Add a reference in your build.gradle.
-
   ```markdown
   implementation 'com.github.tarsys.android:kotlin-orm:1.0.2.8'
   ```
