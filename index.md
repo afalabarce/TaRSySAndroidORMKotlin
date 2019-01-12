@@ -1,8 +1,8 @@
-## Welcome to GitHub Pages
+## Why I created this ORM if there are already many others?
 
-You can use the [editor on GitHub](https://github.com/tarsys/TaRSySAndroidORMKotlin/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+I created this ORM for one simple reason ... I could not find one that would cover all my needs ...
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+I was looking for a ORM that was easy to deploy, powerful, and without any interaction by the developer at the time of making changes to the persistent entities. Previously, I developed an ORM for Java ([TaRSySAndroidORM](http://tarsys.github.io/TaRSySAndroidORM/)), but I saw that there was not one developed with Kotlin and for Kotlin to cover my needs...
 
 ### Markdown
 
