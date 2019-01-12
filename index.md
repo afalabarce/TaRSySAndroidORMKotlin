@@ -14,7 +14,6 @@ The integration with your project is very simple, let's see it in somesteps:
   ```markdown
   implementation 'com.github.tarsys.android:kotlin-orm:1.0.2.8'
   ```
-
 2. Add some meta tags to your Manifest.xml
   ```xml
     <application
@@ -38,7 +37,6 @@ The integration with your project is very simple, let's see it in somesteps:
             </activity>
         </application>
   ```
-  
 3. Add in your Launcher activity this code:
   ```kotlin
   if (SGBDEngine.initialize(this)){
@@ -47,7 +45,6 @@ The integration with your project is very simple, let's see it in somesteps:
     // if something wrong, do other stuff
   }
   ```
-  
 4. Create the entity classes (**All classes must implement the IOrmEntity Interface**):
   ```kotlin
   package com.tarsys.examplekotlinorm.entities
