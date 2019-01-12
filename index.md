@@ -75,7 +75,6 @@ The integration with your project is very simple, let's see it in somesteps:
   ```
 5. Use it!
   ```kotlin
-  
   ```
 
 
