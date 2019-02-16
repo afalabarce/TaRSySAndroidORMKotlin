@@ -64,7 +64,7 @@ class SGBDEngine {
                                                     if (!(classTable.simpleName?.isEmpty() ?: true) && !entities.containsKey(classTable.simpleName!!))
                                                         entities[classTable.simpleName!!] = classTable
                                                 }
-                                            } catch (e: ClassNotFoundException) {
+                                            } catch (e: Exception) {
                                                 e.printStackTrace()
                                             }
                                         }
